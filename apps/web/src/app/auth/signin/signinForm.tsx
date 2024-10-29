@@ -2,17 +2,18 @@
 import React from 'react';
 import { useFormState } from 'react-dom';
 import { TextField, Typography, Box } from '@mui/material';
-import { signUp } from '../../../../lib/auth';
+import { signIn } from '../../../../lib/auth';
 import SubmitButton from '../../../../components/submitButton';
+import Link from 'next/link';
 
-const SignUpForm = () => {
-  const [state, action] = useFormState(signUp, undefined);
+const SignInForm = () => {
+  const [state, action] = useFormState(signIn, undefined);
 
   return (
     <Box
       component="form"
       action={action}
-      sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+      sx={{ display: 'flex', flexDirection: 'column' }}
     >
       {state?.message && (
         <Typography
@@ -23,22 +24,12 @@ const SignUpForm = () => {
             display: 'flex',
             alignContent: 'center',
             maxWidth: 250,
+            mb: 2,
           }}
         >
           {state.message}
         </Typography>
       )}
-
-      <TextField
-        id="name"
-        name="name"
-        label="Name"
-        placeholder="John Doe"
-        variant="outlined"
-        error={!!state?.error?.name}
-        helperText={state?.error?.name || ''}
-        fullWidth
-      />
 
       <TextField
         id="email"
@@ -49,6 +40,7 @@ const SignUpForm = () => {
         error={!!state?.error?.email}
         helperText={state?.error?.email || ''}
         fullWidth
+        sx={{ marginBottom: 2 }}
       />
 
       <TextField
@@ -58,24 +50,19 @@ const SignUpForm = () => {
         type="password"
         variant="outlined"
         error={!!state?.error?.password}
-        helperText={
-          state?.error?.password && (
-            <>
-              Password must:
-              <ul>
-                {state.error.password.map((error) => (
-                  <li key={error}>{error}</li>
-                ))}
-              </ul>
-            </>
-          )
-        }
+        helperText={state?.error?.password || ''}
         fullWidth
       />
+      <Link
+        className="underline text-sm justify-center flex  text-gray-600 mt-2 mb-5"
+        href={'/auth/signin'}
+      >
+        Forgot password?
+      </Link>
 
-      <SubmitButton>Sign Up</SubmitButton>
+      <SubmitButton>Sign In</SubmitButton>
     </Box>
   );
 };
 
-export default SignUpForm;
+export default SignInForm;
