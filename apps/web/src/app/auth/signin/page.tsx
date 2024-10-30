@@ -9,7 +9,7 @@ const SignUpPage = () => {
       <SignInForm />
       <div className="flex justify-between text-sm text-gray-600 mt-2">
         <p>Don&apos;t have an account? &nbsp;</p>
-        <Link className="underline" href={'/auth/signin'}>
+        <Link className="underline" href={'/auth/signup'}>
           Sign Up
         </Link>
       </div>

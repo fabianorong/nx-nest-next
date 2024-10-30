@@ -7,6 +7,7 @@ export default async function middleware(req: NextRequest) {
   // Allow access to /auth/signin and all static assets
   if (
     pathname.startsWith('/auth/signin') || // Allow /auth/signin
+    pathname.startsWith('/auth/signup') || // Allow /auth/signin
     pathname.startsWith('/_next') || // Allow Next.js assets
     pathname.startsWith('/static') || // Allow custom static assets
     pathname.startsWith('/favicon.ico') // Allow favicon
@@ -26,5 +27,5 @@ export default async function middleware(req: NextRequest) {
 
 // Protect all routes except /auth/signin and static assets
 export const config = {
-  matcher: ['/((?!api|_next|static|favicon.ico|auth/signin).*)'],
+  matcher: ['/((?!api|_next|static|favicon.ico|auth/signin|auth/signup).*)'],
 };
