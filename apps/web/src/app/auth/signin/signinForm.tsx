@@ -5,6 +5,8 @@ import { TextField, Typography, Box } from '@mui/material';
 import { signIn } from '../../../lib/auth';
 import SubmitButton from '../../../components/submitButton';
 import Link from 'next/link';
+import { BACKEND_URL } from '@/src/lib/constants';
+import GoogleIcon from '@mui/icons-material/Google';
 
 const SignInForm = () => {
   const [state, action] = useFormState(signIn, undefined);
@@ -61,6 +63,18 @@ const SignInForm = () => {
       </Link>
 
       <SubmitButton>Sign In</SubmitButton>
+
+      {/* <a
+        className="px-4 py-1.5 border- inline-flex w-full min-w-[64px] min-h-7  items-center justify-center rounded-md bg-[#1976d2] text-white mt-[0.5rem]"
+        href={`${BACKEND_URL}/auth/google/login`}
+      > */}
+      <a
+        className="px-4 py-1.5 border- inline-flex w-full min-w-[64px] min-h-7  items-center justify-center rounded-md bg-[#1976d2] hover:bg-[#1565c0] duration-300 text-white mt-[0.5rem] mui-button-root mui-button-contained"
+        href={`${BACKEND_URL}/auth/google/login`}
+      >
+        <GoogleIcon href={`${BACKEND_URL}/auth/google/login`} />
+        <span className="ml-2 text-sm ">Sign in with Google</span>
+      </a>
     </Box>
   );
 };

@@ -1,7 +1,7 @@
 import Navbar from '@/src/components/navbar';
 import './global.css';
 import { getSession } from '../lib/session';
-import { redirect } from 'next/navigation';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 export const metadata = {
   title: 'Welcome to web',
