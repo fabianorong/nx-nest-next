@@ -1,4 +1,4 @@
-import { getSession } from '@/lib/session';
+import { getSession } from '@/src/lib/session';
 import Link from 'next/link';
 import React from 'react';
 

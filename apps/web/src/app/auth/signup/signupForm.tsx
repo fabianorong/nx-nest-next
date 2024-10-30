@@ -2,8 +2,8 @@
 import React from 'react';
 import { useFormState } from 'react-dom';
 import { TextField, Typography, Box } from '@mui/material';
-import { signUp } from '../../../../lib/auth';
-import SubmitButton from '../../../../components/submitButton';
+import { signUp } from '../../../lib/auth';
+import SubmitButton from '../../../components/submitButton';
 
 const SignUpForm = () => {
   const [state, action] = useFormState(signUp, undefined);

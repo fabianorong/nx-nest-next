@@ -2,8 +2,8 @@
 import React from 'react';
 import { useFormState } from 'react-dom';
 import { TextField, Typography, Box } from '@mui/material';
-import { signIn } from '../../../../lib/auth';
-import SubmitButton from '../../../../components/submitButton';
+import { signIn } from '../../../lib/auth';
+import SubmitButton from '../../../components/submitButton';
 import Link from 'next/link';
 
 const SignInForm = () => {

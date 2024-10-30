@@ -1,4 +1,4 @@
-import { deleteSession } from '@/lib/session';
+import { deleteSession } from '@/src/lib/session';
 import { revalidatePath } from 'next/cache';
 import { NextRequest, NextResponse } from 'next/server';
 
