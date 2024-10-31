@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { CreateUserDto } from '../user/dto/create-user.dto';
-import { verify } from 'argon2';
+import { hash, verify } from 'argon2';
 import { Role } from '@prisma/client';
 import { AuthJwtPayload } from './types/auth-jwtPayload';
 import { JwtService } from '@nestjs/jwt';
@@ -37,8 +37,8 @@ export class AuthService {
 
   async login(userId: number, name: string, role: Role) {
     const { accessToken, refreshToken } = await this.generateTokens(userId);
-    // const hashedRT = await hash(refreshToken);
-    // await this.userService.updateHashedRefreshToken(userId, hashedRT);
+    const hashedRT = await hash(refreshToken);
+    await this.userService.updateHashedRefreshToken(userId, hashedRT);
     return {
       id: userId,
       name: name,
@@ -68,15 +68,26 @@ export class AuthService {
     return currentUser;
   }
 
-  async validateRefreshToken(userId: number) {
+  async validateRefreshToken(userId: number, refreshToken: string) {
     const user = await this.userService.findOne(userId);
     if (!user) throw new UnauthorizedException('User not found!');
+
+    const refreshTokenMatched = await verify(
+      user.hashedRefreshToken,
+      refreshToken
+    );
+
+    if (!refreshTokenMatched)
+      throw new UnauthorizedException('Invalid refresh token');
+
     const currentUser = { id: user.id, role: user.role };
     return currentUser;
   }
 
   async refreshToken(userId: number, name: string) {
     const { accessToken, refreshToken } = await this.generateTokens(userId);
+    const hashedRT = await hash(refreshToken);
+    await this.userService.updateHashedRefreshToken(userId, hashedRT);
 
     return {
       id: userId,
@@ -90,5 +101,9 @@ export class AuthService {
     const user = await this.userService.findByEmail(googleUser.email);
     if (user) return user;
     return await this.userService.create(googleUser);
+  }
+
+  async signOut(userId: number) {
+    return await this.userService.updateHashedRefreshToken(userId, null);
   }
 }

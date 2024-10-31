@@ -11,7 +11,6 @@ import {
 import { Response } from 'express';
 
 import { AuthService } from './auth.service';
-// import { UserService } from '../user/user.service';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { LocalAuthGuard } from './guards/local-auth/local-auth.guard';
 import { JwtAuthGuard } from './guards/jwt-auth/jwt-auth.guard';
@@ -64,5 +63,11 @@ export class AuthController {
     res.redirect(
       `http://localhost:3000/api/auth/google/callback?userId=${response.id}&name=${response.name}&accessToken=${response.accessToken}&refreshToken=${response.refreshToken}&role=${response.role}`
     );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('signout')
+  signOut(@Req() req) {
+    return this.authService.signOut(req.user.id);
   }
 }
