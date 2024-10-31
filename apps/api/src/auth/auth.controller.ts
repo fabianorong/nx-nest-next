@@ -16,22 +16,29 @@ import { LocalAuthGuard } from './guards/local-auth/local-auth.guard';
 import { JwtAuthGuard } from './guards/jwt-auth/jwt-auth.guard';
 import { RefreshAuthGuard } from './guards/refresh-auth/refresh-auth.guard';
 import { GoogleAuthGuard } from './guards/google-auth/google-auth.guard';
+import { Public } from './decorators/public.decorators';
+import { Roles } from './decorators/roles.decorators';
+import { use } from 'passport';
+import { RolesGuard } from './guards/roles/roles.guard';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Public()
   @Post('signup')
   async registerUser(@Body() createUserDto: CreateUserDto) {
     return await this.authService.registerUser(createUserDto);
   }
 
+  @Public()
   @UseGuards(LocalAuthGuard)
   @Post('signin')
   login(@Request() req) {
     return this.authService.login(req.user.id, req.user.name, req.user.role);
   }
 
+  @Roles('ADMIN', 'EDITOR')
   @UseGuards(JwtAuthGuard)
   @Get('protected')
   getAll(@Request() req) {
@@ -40,17 +47,20 @@ export class AuthController {
     };
   }
 
+  @Public()
   @UseGuards(RefreshAuthGuard)
   @Post('refresh')
   refreshToken(@Request() req) {
     return this.authService.refreshToken(req.user.id, req.user.name);
   }
 
+  @Public()
   @UseGuards(GoogleAuthGuard)
   @Get('google/login')
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   googleLogin() {}
 
+  @Public()
   @UseGuards(GoogleAuthGuard)
   @Get('google/callback')
   async googleCallback(@Request() req, @Res() res: Response) {
@@ -65,7 +75,6 @@ export class AuthController {
     );
   }
 
-  @UseGuards(JwtAuthGuard)
   @Post('signout')
   signOut(@Req() req) {
     return this.authService.signOut(req.user.id);
