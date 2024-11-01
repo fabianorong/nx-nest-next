@@ -56,3 +56,36 @@ enum Role {
   EDITOR
   USER
 }
+
+model Machine {
+  id               Int               @id @default(autoincrement())
+  name             String
+  type             MachineType
+  monitoringPoints MonitoringPoint[] // A machine has multiple monitoring points
+}
+
+model MonitoringPoint {
+  id        Int      @id @default(autoincrement())
+  name      String
+  machineId Int
+  machine   Machine  @relation(fields: [machineId], references: [id], onDelete: Cascade)
+  sensors   Sensor[] // A monitoring point can have multiple sensors
+}
+
+model Sensor {
+  id                Int             @id @default(autoincrement())
+  model             SensorModel
+  monitoringPointId Int
+  monitoringPoint   MonitoringPoint @relation(fields: [monitoringPointId], references: [id], onDelete: Cascade)
+}
+
+enum MachineType {
+  Pump
+  Fan
+}
+
+enum SensorModel {
+  TcAg
+  TcAs
+  HF_plus
+}
