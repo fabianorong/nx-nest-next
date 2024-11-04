@@ -412,3 +412,20 @@ summary svg {
   }
 }
 
+.machine-list-paper {
+  padding: 16px;
+  flex: 1;
+  margin: 16px;
+  margin-top: 0;
+}
+
+.table-container {
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  gap: 8px;
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  margin-top: 20px;
+}

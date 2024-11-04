@@ -46,3 +46,28 @@ export enum Role {
   EDITOR = 'EDITOR',
   USER = 'USER',
 }
+
+export enum MachineType {
+  PUMP = 'PUMP',
+  FAN = 'FAN',
+}
+
+export const CreateMachineSchema = z.object({
+  name: z
+    .string()
+    .min(2, {
+      message: 'Name must be at least 2 characters long.',
+    })
+    .trim(),
+  type: z.enum(['Fan', 'Pump'], { message: 'Type is required!' }),
+});
+
+export const CreateMonitoringPointSchema = z.object({
+  name: z
+    .string()
+    .min(2, {
+      message: 'Name must be at least 2 characters long.',
+    })
+    .trim(),
+  machineId: z.number().positive({ message: 'Machine ID is required!' }),
+});

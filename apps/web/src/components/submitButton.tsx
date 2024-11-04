@@ -12,6 +12,7 @@ const SubmitButton = ({ children }: PropsWithChildren) => {
       type="submit"
       aria-disabled={pending}
       className="w-full mt-2"
+      color="success"
     >
       {pending ? 'Submitting...' : children}
     </Button>

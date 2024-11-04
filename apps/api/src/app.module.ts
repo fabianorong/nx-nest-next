@@ -7,9 +7,10 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { PrismaService } from './prisma.service';
 import { MachineModule } from './machine/machine.module';
+import { MonitoringPointModule } from './monitoring-point/monitoring-point.module';
 
 @Module({
-  imports: [AuthModule, UserModule, ConfigModule.forRoot({ isGlobal: true }), MachineModule],
+  imports: [AuthModule, UserModule, ConfigModule.forRoot({ isGlobal: true }), MachineModule, MonitoringPointModule],
   controllers: [AppController],
   providers: [AppService, PrismaService],
 })

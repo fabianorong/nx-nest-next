@@ -2,11 +2,11 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateMachineDto } from './dto/create-machine.dto';
 import { PrismaService } from '../prisma.service';
 import { UpdateMachineDto } from './dto/update-machine.dto';
-import { MachineType } from '@prisma/client';
 
 @Injectable()
 export class MachineService {
   constructor(private prisma: PrismaService) {}
+
   async createMachine(createMachineDto: CreateMachineDto) {
     const { ...machine } = createMachineDto;
     return await this.prisma.machine.create({
