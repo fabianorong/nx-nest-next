@@ -78,6 +78,10 @@ export interface Machine {
   type: string;
 }
 
+export interface Sensor {
+  model: string;
+}
+
 export interface MachineState {
   machines: Machine[];
   loading: boolean;
@@ -87,7 +91,9 @@ export interface MachineState {
 export interface MonitoringPoint {
   id: number;
   name: string;
-  machine: Machine;
+  machineId: number;
+  machine?: Machine;
+  sensors: Sensor[];
 }
 
 export interface MonitoringPointState {

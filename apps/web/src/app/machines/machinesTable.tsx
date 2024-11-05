@@ -1,17 +1,9 @@
 import { useEffect } from 'react';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Typography,
-  CircularProgress,
-} from '@mui/material';
-import { fetchMachines } from '@/src/lib/redux/store/machineslice';
+import { Typography } from '@mui/material';
+
 import { useAppDispatch, useAppSelector } from '@/src/lib/redux/store/hooks';
+import { fetchMachines } from '@/src/lib/redux/store/machineslice';
+import DataTable from '@/src/components/table';
 
 const MachinesTable = () => {
   const dispatch = useAppDispatch();
@@ -23,38 +15,29 @@ const MachinesTable = () => {
     dispatch(fetchMachines());
   }, [dispatch]);
 
-  if (loading) {
-    return <CircularProgress />;
-  }
+  const columns = [
+    { field: 'name', headerName: 'Machine Name' },
+    { field: 'machineType', headerName: 'Machine Type' },
+  ];
 
-  if (error) {
-    return <Typography color="error">Error: {error}</Typography>;
-  }
+  const data = machines.map((machine) => ({
+    name: machine.name,
+    machineName: machine?.name || 'N/A',
+    machineType: machine?.type || 'N/A',
+  }));
 
   return (
-    <TableContainer component={Paper}>
+    <>
       <Typography variant="h6" align="center" gutterBottom>
-        Machine List
+        Machines List
       </Typography>
-      <Table aria-label="machine table">
-        <TableHead>
-          <TableRow>
-            <TableCell>ID</TableCell>
-            <TableCell>Name</TableCell>
-            <TableCell>Type</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {machines.map((machine) => (
-            <TableRow key={machine.id}>
-              <TableCell>{machine.id}</TableCell>
-              <TableCell>{machine.name}</TableCell>
-              <TableCell>{machine.type}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+      <DataTable
+        columns={columns}
+        data={data}
+        loading={loading}
+        error={error}
+      />
+    </>
   );
 };
 

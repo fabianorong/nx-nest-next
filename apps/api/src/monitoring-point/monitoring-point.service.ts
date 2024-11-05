@@ -43,6 +43,11 @@ export class MonitoringPointService {
             type: true,
           },
         },
+        sensors: {
+          select: {
+            model: true,
+          },
+        },
       },
     });
   }

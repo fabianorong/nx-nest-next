@@ -1,54 +1,54 @@
 import {
+  Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
+  Paper,
+  CircularProgress,
+  Typography,
 } from '@mui/material';
 
-const columns = [
-  { header: 'Name', accessor: 'name' },
-  { header: 'Type', accessor: 'type' },
-  { header: 'Actions', accessor: 'action' },
-];
-
-function createData(name: string, type: string, actions: Array<string>) {
-  return { name, type, actions };
+interface DataTableProps<T> {
+  columns: { field: string; headerName: string }[];
+  data: T[];
+  loading: boolean;
+  error: string | null;
 }
 
-const rows = [
-  createData('Machine 1', 'Pump', ['Edit', 'Delete']),
-  createData('Machine 2', 'Fan', ['Edit', 'Delete']),
-];
-
-const Table = () => {
+const DataTable = <T,>({
+  columns,
+  data,
+  loading,
+  error,
+}: DataTableProps<T>) => {
+  if (loading) return <CircularProgress />;
+  if (error) return <Typography color="error">Error: {error}</Typography>;
   return (
-    <TableContainer>
-      <TableHead>
-        <TableRow>
-          {columns.map((col) => (
-            <TableCell key={col.accessor}>
-              <h3 className="font-semibold">{col.header}</h3>
-            </TableCell>
-          ))}
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {rows.map((row) => (
-          <TableRow
-            key={row.name}
-            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-          >
-            <TableCell component="th" scope="row">
-              {row.name}
-            </TableCell>
-            <TableCell align="right">{row.type}</TableCell>
-            <TableCell align="right">{row.actions}</TableCell>
+    <TableContainer component={Paper}>
+      <Table aria-label="data table">
+        <TableHead>
+          <TableRow>
+            {columns.map((col) => (
+              <TableCell key={col.field}>{col.headerName}</TableCell>
+            ))}
           </TableRow>
-        ))}
-      </TableBody>
+        </TableHead>
+        <TableBody>
+          {data.map((row, rowIndex) => (
+            <TableRow key={rowIndex}>
+              {columns.map((col) => (
+                <TableCell key={col.field}>
+                  {(row as any)[col.field] ?? 'N/A'}
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </TableContainer>
   );
 };
 
-export default Table;
+export default DataTable;

@@ -96,3 +96,26 @@ export async function fetchAllMonitoringPoints() {
     return []; // Return an empty array in case of error
   }
 }
+
+export async function createSensor(model: string, monitoringPointId: number) {
+  try {
+    const response = await fetch(
+      `${process.env.BACKEND_URL}/sensor/${monitoringPointId}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ model }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to create sensor');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error creating sensor:', error);
+  }
+}
