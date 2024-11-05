@@ -4,8 +4,6 @@ import { authFetch } from './authFetch';
 import { BACKEND_URL } from './constants';
 import { CreateMachineSchema, FormState } from './type';
 
-// import { getSession } from './session';
-
 export const getProfile = async () => {
   const response = await authFetch(`${BACKEND_URL}/auth/protected`);
 
@@ -28,8 +26,6 @@ export async function createMachine(
       error: validationFields.error.flatten().fieldErrors,
     };
   }
-  console.log(validationFields.data.name);
-  console.log(validationFields.data.type);
 
   const response = await fetch(`${BACKEND_URL}/machine/create-machine`, {
     method: 'POST',
@@ -48,17 +44,55 @@ export async function createMachine(
   }
 }
 
-export async function getMachines() {
-  const response = await fetch(`${BACKEND_URL}/machine/all-machines`, {
-    method: 'GET',
-  });
+export async function fetchAllMachines() {
+  try {
+    const response = await fetch(`${BACKEND_URL}/machine/all-machines`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch machines');
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching machines:', error);
+    return []; // Return an empty array in case of error
+  }
+}
 
-  if (response.ok) {
-    const result = await response.json();
-    return result;
-  } else {
-    return {
-      message: response.statusText || 'Failed to get machines.',
-    };
+export async function createMonitoringPoint(name: string, machineId: number) {
+  try {
+    const response = await fetch(
+      `${process.env.BACKEND_URL}/monitoring-point/${machineId}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to create monitoring point');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error creating monitoring point:', error);
+  }
+}
+
+export async function fetchAllMonitoringPoints() {
+  try {
+    const response = await fetch(
+      `${process.env.BACKEND_URL}/monitoring-point/all-monitoring-points`
+    );
+    if (!response.ok) {
+      throw new Error('Failed to fetch monitoring points');
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching monitoring points:', error);
+    return []; // Return an empty array in case of error
   }
 }

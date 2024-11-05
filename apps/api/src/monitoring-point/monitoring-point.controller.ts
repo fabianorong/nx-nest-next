@@ -1,4 +1,11 @@
-import { Body, Controller, Param, ParseIntPipe, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+} from '@nestjs/common';
 import { MonitoringPointService } from './monitoring-point.service';
 import { CreateMonitoringPointDto } from './dto/create-monitoringPoint.dto';
 import { Public } from '../auth/decorators/public.decorators';
@@ -19,5 +26,10 @@ export class MonitoringPointController {
       machineId,
       createMonitoringPointDto
     );
+  }
+
+  @Get('all-monitoring-points')
+  async findAll() {
+    return await this.monitoringPointService.getAllMonitoringPointsWithMachineInfo();
   }
 }

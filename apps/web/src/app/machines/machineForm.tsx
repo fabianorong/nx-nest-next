@@ -48,6 +48,7 @@ const CreateMachineForm = () => {
         select
         variant="outlined"
         fullWidth
+        defaultValue=""
       >
         {MachineTypeOptions.map((option) => (
           <MenuItem key={option} value={option}>

@@ -29,4 +29,21 @@ export class MonitoringPointService {
       };
     }
   }
+
+  async findAll() {
+    return await this.prisma.monitoringPoint.findMany();
+  }
+
+  async getAllMonitoringPointsWithMachineInfo() {
+    return await this.prisma.monitoringPoint.findMany({
+      include: {
+        machine: {
+          select: {
+            name: true,
+            type: true,
+          },
+        },
+      },
+    });
+  }
 }

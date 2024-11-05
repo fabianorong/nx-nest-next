@@ -1,6 +1,8 @@
+import * as React from 'react';
 import Navbar from '@/src/components/navbar';
 import './global.css';
 import { getSession } from '../lib/session';
+import Providers from './Providers';
 
 export const metadata = {
   title: 'Welcome to web',
@@ -17,8 +19,10 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body>
-        {session && <Navbar />}
-        {children}
+        <Providers>
+          {session && <Navbar />}
+          {children}
+        </Providers>
       </body>
     </html>
   );

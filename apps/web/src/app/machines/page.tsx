@@ -2,9 +2,10 @@
 
 import React, { useState } from 'react';
 import CreateMachineForm from './machineForm';
-import { Button, Grid2, Paper } from '@mui/material';
+import { Button, Paper } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import Table from '@/src/components/table';
+
+import MachinesTable from './machinesTable';
 
 const Machines = () => {
   const [visible, setVisible] = useState(false);
@@ -26,10 +27,11 @@ const Machines = () => {
             Add Machine
           </Button>
         </div>
-        <div className="mt-5 ">{visible ? <CreateMachineForm /> : null}</div>
-        <div className="mt-10">
-          <Table />
+        <div className="mt-5 mb-5">
+          {visible ? <CreateMachineForm /> : null}
         </div>
+        <MachinesTable />
+        {/* <div className="mt-10"></div> */}
       </Paper>
     </div>
   );

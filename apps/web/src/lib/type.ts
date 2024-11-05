@@ -71,3 +71,27 @@ export const CreateMonitoringPointSchema = z.object({
     .trim(),
   machineId: z.number().positive({ message: 'Machine ID is required!' }),
 });
+
+export interface Machine {
+  id: number;
+  name: string;
+  type: string;
+}
+
+export interface MachineState {
+  machines: Machine[];
+  loading: boolean;
+  error: string | null;
+}
+
+export interface MonitoringPoint {
+  id: number;
+  name: string;
+  machine: Machine;
+}
+
+export interface MonitoringPointState {
+  monitoringPoints: MonitoringPoint[];
+  loading: boolean;
+  error: string | null;
+}
