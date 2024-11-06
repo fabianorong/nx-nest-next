@@ -1,11 +1,13 @@
 import { getSession } from '@/src/lib/session';
 import Link from 'next/link';
 import React from 'react';
+import LogoutIcon from '@mui/icons-material/Logout';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 const SignInButton = async () => {
   const session = await getSession();
   return (
-    <div className="flex items-center gap-2 ml-auto">
+    <div className="menu-item">
       {!session || !session.user ? (
         <>
           <Link href={'/auth/signin'}>Sign In</Link>
@@ -13,8 +15,11 @@ const SignInButton = async () => {
         </>
       ) : (
         <>
-          <p>{session.user.name}</p>
-          <a href={'/api/auth/signout'}>Sign Out</a>
+          {/* <div>{session.user.name}</div> */}
+          <ExitToAppIcon />
+          <a href={'/api/auth/signout'} className="menu-item-font">
+            Sign Out
+          </a>
         </>
       )}
     </div>

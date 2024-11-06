@@ -429,3 +429,10 @@ summary svg {
   margin: 0 auto;
   margin-top: 20px;
 }
+
+.menu-item {
+  @apply flex items-center justify-center lg:justify-start gap-4 text-slate-50 py-2 md:px-2 rounded-md hover:bg-[#590d22];}
+
+.menu-item-font{
+  @apply hidden lg:block my-1
+}

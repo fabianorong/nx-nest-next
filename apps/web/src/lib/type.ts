@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { z } from 'zod';
 
 export type FormState =
@@ -6,6 +8,7 @@ export type FormState =
         name?: string[];
         email?: string[];
         password?: string[];
+        type?: string[];
       };
       message?: string;
     }
@@ -100,4 +103,11 @@ export interface MonitoringPointState {
   monitoringPoints: MonitoringPoint[];
   loading: boolean;
   error: string | null;
+}
+
+declare type MachineTypes = 'Fan' | 'Pump';
+
+declare interface RegisterMachineParams {
+  name: string;
+  type: MachineTypes;
 }

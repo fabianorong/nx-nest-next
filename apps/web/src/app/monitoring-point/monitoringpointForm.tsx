@@ -1,16 +1,16 @@
-'use client';
+import React, { useEffect, useState } from 'react';
 import {
-  Box,
   TextField,
+  Button,
   Typography,
+  Paper,
   MenuItem,
   CircularProgress,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/src/lib/redux/store/hooks';
+import { fetchMonitoringPoints } from '@/src/lib/redux/store/monitoringPointSlice';
+import apiService from '@/src/lib/apiService';
 import { fetchMachines } from '@/src/lib/redux/store/machineslice';
-import { createMonitoringPoint } from '@/src/lib/actions';
-import SubmitButton from '@/src/components/submitButton';
 
 const CreateMonitoringPointForm = () => {
   const dispatch = useAppDispatch();
@@ -18,7 +18,6 @@ const CreateMonitoringPointForm = () => {
     (state) => state.machines
   );
 
-  // Local state for form inputs
   const [name, setName] = useState('');
   const [machineId, setMachineId] = useState<number | ''>('');
   const [formError, setFormError] = useState<string | null>(null);
@@ -30,22 +29,33 @@ const CreateMonitoringPointForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !machineId) {
+
+    if (!name && !machineId) {
       setFormError('Please fill in all required fields.');
       return;
     }
+    if (!machineId) {
+      setFormError('Please select a machine.');
+      return;
+    }
+    if (!name) {
+      setFormError('Please enter a name.');
+      return;
+    }
 
-    // Call the createMonitoringPoint action
-    const result = await createMonitoringPoint(name, machineId);
-
+    const result = await apiService.createMonitoringPoint(Number(machineId), {
+      name,
+    });
     if (result.error) {
       setFormError(result.error);
-      setSuccessMessage(null);
+      setSuccessMessage('');
     } else {
       setFormError(null);
       setSuccessMessage('Monitoring point created successfully.');
       setName(''); // Reset the form
       setMachineId('');
+      //  Re-fetch monitoring points to update the list after adding a new point
+      dispatch(fetchMonitoringPoints());
     }
   };
 
@@ -58,61 +68,49 @@ const CreateMonitoringPointForm = () => {
   }
 
   return (
-    <Box
-      component="form"
-      onSubmit={handleSubmit}
-      sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
-    >
-      {formError && (
-        <Typography
-          variant="body2"
-          color="error"
-          sx={{ justifyContent: 'center', display: 'flex', maxWidth: 250 }}
-        >
-          {formError}
-        </Typography>
-      )}
-
+    <Paper elevation={3} style={{ padding: '20px', marginTop: '20px' }}>
+      <Typography variant="h6">Create New Monitoring Point</Typography>
+      {formError && <Typography color="error">{formError}</Typography>}
       {successMessage && (
-        <Typography
-          variant="body2"
-          color="primary"
-          sx={{ justifyContent: 'center', display: 'flex', maxWidth: 250 }}
-        >
-          {successMessage}
-        </Typography>
+        <Typography color="primary">{successMessage}</Typography>
       )}
+      <form onSubmit={handleSubmit} noValidate autoComplete="off">
+        <TextField
+          label="Monitoring Point Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          fullWidth
+          margin="normal"
+          required
+        />
 
-      <TextField
-        id="name"
-        name="name"
-        label="Monitoring Point Name"
-        placeholder="Enter monitoring point name"
-        variant="outlined"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        fullWidth
-      />
+        <TextField
+          id="machineId"
+          name="machineId"
+          label="Machine ID"
+          select
+          variant="outlined"
+          fullWidth
+          value={machineId}
+          onChange={(e) => setMachineId(Number(e.target.value))}
+        >
+          {machines.map((machine) => (
+            <MenuItem key={machine.id} value={machine.id}>
+              {machine.name}
+            </MenuItem>
+          ))}
+        </TextField>
 
-      <TextField
-        id="machineId"
-        name="machineId"
-        label="Machine ID"
-        select
-        variant="outlined"
-        fullWidth
-        value={machineId}
-        onChange={(e) => setMachineId(Number(e.target.value))}
-      >
-        {machines.map((machine) => (
-          <MenuItem key={machine.id} value={machine.id}>
-            {machine.name}
-          </MenuItem>
-        ))}
-      </TextField>
-
-      <SubmitButton>Create Monitoring Point</SubmitButton>
-    </Box>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          style={{ marginTop: '10px' }}
+        >
+          Create
+        </Button>
+      </form>
+    </Paper>
   );
 };
 
